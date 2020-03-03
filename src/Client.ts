@@ -5,6 +5,7 @@ import {
   VerifyConfigurationResult,
 } from "codeclimate-connector-sdk"
 
+import { ApiClient } from "./ApiClient"
 import { ConfigurationVerifier } from "./ConfigurationVerifier"
 import { StreamSyncer } from "./StreamSyncer"
 
@@ -14,17 +15,24 @@ export class Client extends AbstractClient implements ClientInterface {
   }
 
   discoverStreams(): Promise<void> {
-    return new Promise((resolve, _reject) => {
-      this.recordProducer.produce({
-        type: "Stream",
-        attributes: {
-          id: "repository",
-          self: "https://codecov.io/api/gh",
-          name: "Codecov Repository",
-        },
-      })
+    return new ApiClient(this.configuration.get("apiToken")).get("/api/gh").then((resp: any) => {
 
-      resolve()
+      // overcoming flatMap absence with concat for now
+      const repos = [].concat(...resp["teams"].map((team) => {
+        const username = team["username"]
+        return team.repos.map((repo) => `${username}/${repo["name"]}`)
+      }))
+
+      repos.map((repo) => {
+        this.recordProducer.produce({
+          type: "Stream",
+          attributes: {
+            id: repo,
+            self: `https://codecov.io/api/gh/${repo}`,
+            name: `Repository ${repo}`,
+          },
+        })
+      })
     })
   }
 

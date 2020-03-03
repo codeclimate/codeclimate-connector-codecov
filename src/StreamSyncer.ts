@@ -16,7 +16,7 @@ export class StreamSyncer {
     public earliestDataCutoff: Date
   ) {}
 
-  public run(): Promise<void> {
+  run(): Promise<void> {
     return Promise.resolve()
   }
 }
