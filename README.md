@@ -1,6 +1,7 @@
 # Code Climate Connector: codecov
 
-TODO - describe your connector here
+A connector integration for Code Climate Velocity to collect data from
+[Codecov.io](https://codevoc.io).
 
 ## Configuration
 
