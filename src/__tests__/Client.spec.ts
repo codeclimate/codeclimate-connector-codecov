@@ -7,16 +7,19 @@ import {
 
 import { Client } from "../Client"
 
+import { StreamSyncer } from "../StreamSyncer"
+jest.mock("../StreamSyncer")
+
+const fakeConfig = new Map([["apiToken", "some-token"]])
+
 describe(Client, () => {
   describe("verifyConfiguration", () => {
-    test.skip("says valid config is valid", () => {
+    test("says valid config is valid", () => {
       const client = new Client(
-        new Map([
-          // TODO - your config keys go here
-        ]),
+        fakeConfig,
         buildFakeRecordProducer(),
         buildFakeStateManager(),
-        buildFakeLogger(),
+        buildFakeLogger()
       )
 
       return client.verifyConfiguration().then((result) => {
@@ -24,12 +27,12 @@ describe(Client, () => {
       })
     })
 
-    test.skip("says invalid config invalid, with errors", () => {
+    test("says invalid config invalid, with errors", () => {
       const client = new Client(
         new Map(),
         buildFakeRecordProducer(),
         buildFakeStateManager(),
-        buildFakeLogger(),
+        buildFakeLogger()
       )
 
       return client.verifyConfiguration().then((result) => {
@@ -41,14 +44,12 @@ describe(Client, () => {
   })
 
   describe("syncStream", () => {
-    test.skip("it syncs", () => {
+    test("it syncs", () => {
       const client = new Client(
-        new Map([
-          // TODO - your config keys go here
-        ]),
+        fakeConfig,
         buildFakeRecordProducer(),
         buildFakeStateManager(),
-        buildFakeLogger(),
+        buildFakeLogger()
       )
 
       const stream = new Stream({
@@ -57,13 +58,13 @@ describe(Client, () => {
           id: "your-id-here",
           self: "http://example.com/your-uri-here",
           name: "your-name-here",
-        }
+        },
       })
       const dateCutoff = new Date(new Date().valueOf() - 1_000_000)
 
-      return client.syncStream(stream, dateCutoff).then((_result) => {
-        // TODO - check that `client.manager.sentMessages` contains what you
-        // expect
+      return client.syncStream(stream, dateCutoff).then(() => {
+        const mock = (StreamSyncer as any).mock
+        expect(mock.calls.length).toBe(1)
       })
     })
   })

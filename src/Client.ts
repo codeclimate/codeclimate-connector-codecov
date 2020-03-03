@@ -5,19 +5,40 @@ import {
   VerifyConfigurationResult,
 } from "codeclimate-connector-sdk"
 
+import { ConfigurationVerifier } from "./ConfigurationVerifier"
+import { StreamSyncer } from "./StreamSyncer"
+
 export class Client extends AbstractClient implements ClientInterface {
   verifyConfiguration(): Promise<VerifyConfigurationResult> {
-    this.logger.debug("TODO - implement verifyConfiguration")
-    return Promise.resolve({ isValid: true })
+    return new ConfigurationVerifier(this.configuration).run()
   }
 
   discoverStreams(): Promise<void> {
-    this.logger.debug(`TODO - implement discoverStreams.`)
-    return Promise.resolve()
+    return new Promise((resolve, _reject) => {
+      this.recordProducer.produce({
+        type: "Stream",
+        attributes: {
+          id: "repository",
+          self: "https://codecov.io/api/gh",
+          name: "Codecov Repository",
+        },
+      })
+
+      resolve()
+    })
   }
 
   syncStream(stream: Stream, earliestDataCutoff: Date): Promise<void> {
-    this.logger.debug(`TODO - implement syncStream. Got ${stream.id}, ${earliestDataCutoff}`)
-    return Promise.resolve()
+    const syncer = new StreamSyncer(
+      this.configuration,
+      this.recordProducer,
+      this.stateManager,
+      this.logger,
+      stream,
+      earliestDataCutoff
+    )
+
+    syncer.run()
+    return Promise.resolve() // TODO: fix - making TS happy :shrug:
   }
 }
