@@ -39,7 +39,7 @@ export function StreamSyncer(
       fetchPage(++page).then(processResponse)
     }
 
-    commits.map((commit) => {
+    commits.forEach((commit) => {
       const record = recordFor(commit)
       client.recordProducer.produce({ record })
     })
