@@ -10,6 +10,8 @@ import { Client } from "../Client"
 import { StreamSyncer } from "../StreamSyncer"
 jest.mock("../StreamSyncer")
 
+jest.mock("../ApiClient")
+
 const fakeConfig = new Map([["apiToken", "some-token"]])
 
 describe(Client, () => {
@@ -39,6 +41,23 @@ describe(Client, () => {
         expect(result.isValid).toBe(false)
         expect(result.errorMessages).toBeDefined()
         expect(result.errorMessages!.length).toBeGreaterThan(0)
+      })
+    })
+  })
+
+  describe("discoverStreams", () => {
+    test("list repos", () => {
+      const producer = buildFakeRecordProducer()
+
+      const client = new Client(
+        fakeConfig,
+        producer,
+        buildFakeStateManager(),
+        buildFakeLogger()
+      )
+
+      return client.discoverStreams().then(() => {
+        expect(producer.records.map((r: any) => r.attributes.id)).toEqual(["codeclimate-testing/engines-test"])
       })
     })
   })

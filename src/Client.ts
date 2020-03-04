@@ -22,7 +22,7 @@ export class Client extends AbstractClient implements ClientInterface {
         return team.repos.map((repo) => `${username}/${repo["name"]}`)
       })
 
-      repos.map((repo) => {
+      return repos.map((repo) => {
         this.recordProducer.produce({
           type: "Stream",
           attributes: {
