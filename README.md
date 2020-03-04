@@ -8,7 +8,7 @@ A connector integration for Code Climate Velocity to collect data from
 ##### **connector-config.json**
 ```json
 {
-  "apiToken": "your_v2_api_token"
+  "apiToken": "your_api_token"
 }
 ```
 
@@ -24,11 +24,11 @@ several make rules to run different commands easily:
 # Run this to check the correctness of your connector-config.json
 make verify-configuration
 
-# Run this to list your CirclCI projects as Streams
+# Run this to list your Codecov repositories as Streams
 make discover-streams
 
-# Run this to sync data from one of your projects. Write the contents of one of
-# the Stream records emitted by discover-streams to stream.json
+# Run this to sync data from one of your repositories. Write the contents of one
+# of the Stream records emitted by discover-streams to stream.json
 make sync-stream
 ```
 
