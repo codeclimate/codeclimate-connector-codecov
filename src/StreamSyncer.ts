@@ -6,29 +6,47 @@ export function StreamSyncer(
   client: AbstractClient,
   apiClient: ApiClient,
   streamId: string,
-  _earliestDataCutoff: Date
+  earliestDataCutoff: Date
 ) {
-  function run(): Promise<void> {
-    const path = `/api/gh/${streamId}/commits`
+  const limit = 100
+  const repository = `https://codecov.io/api/gh/${streamId}`
+  const path = `/api/gh/${streamId}/commits`
+  const startDate = earliestDataCutoff.toISOString().split("T")[0]
 
-    return apiClient.get(path).then((response: any) => {
-      const repository = `https://codecov.io/api/gh/${streamId}`
+  let page = 1
 
-      response.commits.map((commit) => {
-        const record = {
-          _type: "CoverageTotals",
-          self: `${repository}/commits/${commit.commitid}`,
-          commitOid: commit.commitid,
-          coverage: Number(commit.totals.c),
-          filesCount: commit.totals.f,
-          linesCount: commit.totals.n,
-          linesHitCount: commit.totals.h,
-          repository: repository,
-        }
+  function recordFor(commit: any): object {
+    return {
+      _type: "CoverageTotals",
+      self: `${repository}/commits/${commit.commitid}`,
+      commitOid: commit.commitid,
+      coverage: Number(commit.totals.c),
+      filesCount: commit.totals.f,
+      linesCount: commit.totals.n,
+      linesHitCount: commit.totals.h,
+      repository: repository,
+    }
+  }
 
-        client.recordProducer.produce({ record })
-      })
+  function fetchPage(page: number) {
+    return apiClient.get(path, { page: page, limit: limit, from: startDate })
+  }
+
+  function processResponse(response: any) {
+    const commits = response.commits
+
+    if (commits.length === limit) {
+      fetchPage(++page).then(processResponse)
+    }
+
+    commits.map((commit) => {
+      const record = recordFor(commit)
+      client.recordProducer.produce({ record })
     })
+  }
+
+  function run(): Promise<void> {
+    return fetchPage(page).then(processResponse)
   }
 
   return {

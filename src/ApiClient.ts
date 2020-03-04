@@ -34,10 +34,7 @@ export class ApiClient {
 
           let bodyStr = ""
 
-          resp.on("data", (chunk) => {
-            return (bodyStr += chunk)
-          })
-          resp.on("error", (e) => reject(e))
+          resp.on("data", (chunk) => (bodyStr += chunk))
           resp.on("end", () => {
             if (resp.statusCode === 200) {
               resolve(JSON.parse(bodyStr))
