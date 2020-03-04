@@ -34,5 +34,5 @@ sync-stream: build
 		codeclimate-connector sync-stream \
 		codecov \
 		connector-config.json \
-		'{"_type": "Stream", "id":"codeclimate-testing/engines-test", "self": "https://codecov.io/api/gh/codeclimate-testing/engines-test", "name":"Repository"}' \
+		'$(shell cat stream.json)' \
 		2020-01-01
