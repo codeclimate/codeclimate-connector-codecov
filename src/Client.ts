@@ -12,7 +12,7 @@ import { StreamDiscovery } from "./StreamDiscovery"
 
 export class Client extends AbstractClient implements ClientInterface {
   verifyConfiguration(): Promise<VerifyConfigurationResult> {
-    return new ConfigurationVerifier(this.configuration).run()
+    return ConfigurationVerifier(this.configuration).run()
   }
 
   discoverStreams(): Promise<void> {

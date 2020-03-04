@@ -1,10 +1,8 @@
 import { ClientConfiguration, VerifyConfigurationResult } from "codeclimate-connector-sdk"
 
-export class ConfigurationVerifier {
-  constructor(public configuration: ClientConfiguration) {}
-
-  run(): Promise<VerifyConfigurationResult> {
-    if (!this.apiTokenPresent()) {
+export function ConfigurationVerifier(configuration: ClientConfiguration) {
+  function run(): Promise<VerifyConfigurationResult> {
+    if (!apiTokenPresent()) {
       return Promise.resolve({
         isValid: false,
         errorMessages: ["apiToken must be present"],
@@ -14,7 +12,11 @@ export class ConfigurationVerifier {
     return Promise.resolve({ isValid: true })
   }
 
-  private apiTokenPresent() {
-    return typeof this.configuration.get("apiToken") === "string"
+  function apiTokenPresent(): boolean {
+    return typeof configuration.get("apiToken") === "string"
+  }
+
+  return {
+    run: run,
   }
 }
