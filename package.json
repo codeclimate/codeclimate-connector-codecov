@@ -2,6 +2,9 @@
   "name": "codeclimate-connector-codecov",
   "version": "0.0.1",
   "description": "Code Climate Connector: codecov",
+  "engines": {
+    "node": ">=12.10.0"
+  },
   "scripts": {
     "build": "tsc",
     "test": "jest",

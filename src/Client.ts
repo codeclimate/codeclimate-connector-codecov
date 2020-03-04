@@ -17,11 +17,10 @@ export class Client extends AbstractClient implements ClientInterface {
   discoverStreams(): Promise<void> {
     return new ApiClient(this.configuration.get("apiToken")).get("/api/gh").then((resp: any) => {
 
-      // overcoming flatMap absence with concat for now
-      const repos = [].concat(...resp["teams"].map((team) => {
+      const repos = resp["teams"].flatMap((team) => {
         const username = team["username"]
         return team.repos.map((repo) => `${username}/${repo["name"]}`)
-      }))
+      })
 
       repos.map((repo) => {
         this.recordProducer.produce({
