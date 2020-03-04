@@ -35,14 +35,14 @@ export function StreamSyncer(
   function processResponse(response: any) {
     const commits = response.commits
 
-    if (commits.length === limit) {
-      fetchPage(++page).then(processResponse)
-    }
-
     commits.forEach((commit) => {
       const record = recordFor(commit)
       client.recordProducer.produce({ record })
     })
+
+    if (commits.length === limit) {
+      return fetchPage(++page).then(processResponse)
+    }
   }
 
   function run(): Promise<void> {
