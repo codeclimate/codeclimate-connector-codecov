@@ -8,6 +8,7 @@ import {
 import { ApiClient } from "./ApiClient"
 import { ConfigurationVerifier } from "./ConfigurationVerifier"
 import { StreamSyncer } from "./StreamSyncer"
+import { StreamDiscovery } from "./StreamDiscovery"
 
 export class Client extends AbstractClient implements ClientInterface {
   verifyConfiguration(): Promise<VerifyConfigurationResult> {
@@ -15,23 +16,7 @@ export class Client extends AbstractClient implements ClientInterface {
   }
 
   discoverStreams(): Promise<void> {
-    return this.apiClient.get("/api/gh").then((resp: any) => {
-      const repos = resp["teams"].flatMap((team) => {
-        const username = team["username"]
-        return team.repos.map((repo) => `${username}/${repo["name"]}`)
-      })
-
-      return repos.map((repo) => {
-        this.recordProducer.produce({
-          record: {
-            _type: "Stream",
-            id: repo,
-            self: `https://codecov.io/api/gh/${repo}`,
-            name: `Repository ${repo}`,
-          },
-        })
-      })
-    })
+    return StreamDiscovery(this.apiClient, this.recordProducer).run()
   }
 
   syncStream(stream: Stream, earliestDataCutoff: Date): Promise<void> {
