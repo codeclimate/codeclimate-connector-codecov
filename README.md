@@ -5,7 +5,12 @@ A connector integration for Code Climate Velocity to collect data from
 
 ## Configuration
 
-TODO - describe the configuration your connector uses here.
+##### **connector-config.json**
+```json
+{
+  "apiToken": "your_v2_api_token" # only needs read-only access
+}
+```
 
 ## Running the connector locally
 
