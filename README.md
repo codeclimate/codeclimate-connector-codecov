@@ -8,7 +8,7 @@ A connector integration for Code Climate Velocity to collect data from
 ##### **connector-config.json**
 ```json
 {
-  "apiToken": "your_v2_api_token" # only needs read-only access
+  "apiToken": "your_v2_api_token"
 }
 ```
 
