@@ -4,7 +4,7 @@ import { ApiClient } from "./ApiClient"
 
 export function StreamDiscovery(apiClient: ApiClient, producer: RecordProducer) {
   function produceRecordFor(repo: string) {
-    return producer.produce({
+    producer.produce({
       record: {
         _type: "Stream",
         id: repo,
@@ -21,10 +21,10 @@ export function StreamDiscovery(apiClient: ApiClient, producer: RecordProducer) 
     })
   }
 
-  function run(): Promise<object> {
+  function run(): Promise<void> {
     return apiClient.get("/api/gh").then((response: any) => {
       const repos = reposFrom(response)
-      return repos.map(produceRecordFor)
+      repos.map(produceRecordFor)
     })
   }
 
