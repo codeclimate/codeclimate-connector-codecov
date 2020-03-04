@@ -27,5 +27,7 @@ To run the connector in an integration environment, the
     yarn run codeclimate-connector sync-stream codecov connector-config.json stream-json-or-null YYYY-MM-DD
     ```
 
+or checkout the [Makefile](Makefile)
+
 [sdk]: https://github.com/codeclimate/codeclimate-connector-sdk
 
