@@ -20,8 +20,7 @@ export class Client extends AbstractClient implements ClientInterface {
   }
 
   syncStream(stream: Stream, earliestDataCutoff: Date): Promise<void> {
-    const syncer = new StreamSyncer(this, this.apiClient, stream.id, earliestDataCutoff)
-    return syncer.run()
+    return StreamSyncer(this, this.apiClient, stream.id, earliestDataCutoff).run()
   }
 
   private get apiClient() {

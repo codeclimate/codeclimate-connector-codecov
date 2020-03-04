@@ -2,33 +2,36 @@ import { AbstractClient } from "codeclimate-connector-sdk"
 
 import { ApiClient } from "./ApiClient"
 
-export class StreamSyncer {
-  constructor(
-    public client: AbstractClient,
-    public apiClient: ApiClient,
-    public streamId: string,
-    public earliestDataCutoff: Date
-  ) {
-  }
+export function StreamSyncer(
+  client: AbstractClient,
+  apiClient: ApiClient,
+  streamId: string,
+  _earliestDataCutoff: Date
+) {
+  function run(): Promise<void> {
+    const path = `/api/gh/${streamId}/commits`
 
-  run(): Promise<void> {
-    return this.apiClient.get(`/api/gh/${this.streamId}/commits`).then((resp: any) => {
-      const repo = `https://codecov.io/api/gh/${this.streamId}`
+    return apiClient.get(path).then((response: any) => {
+      const repository = `https://codecov.io/api/gh/${streamId}`
 
-      resp.commits.map((c) => {
+      response.commits.map((commit) => {
         const record = {
           _type: "CoverageTotals",
-          self: `${repo}/commits/${c.commitid}`,
-          commitOid: c.commitid,
-          coverage: Number(c.totals.c),
-          filesCount: c.totals.f,
-          linesCount: c.totals.n,
-          linesHitCount: c.totals.h,
-          repository: repo,
+          self: `${repository}/commits/${commit.commitid}`,
+          commitOid: commit.commitid,
+          coverage: Number(commit.totals.c),
+          filesCount: commit.totals.f,
+          linesCount: commit.totals.n,
+          linesHitCount: commit.totals.h,
+          repository: repository,
         }
 
-        this.client.recordProducer.produce({ record })
+        client.recordProducer.produce({ record })
       })
     })
+  }
+
+  return {
+    run: run,
   }
 }
