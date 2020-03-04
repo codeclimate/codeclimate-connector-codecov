@@ -1,22 +1,36 @@
-import {
-  ClientConfiguration,
-  Logger,
-  RecordProducer,
-  StateManager,
-  Stream,
-} from "codeclimate-connector-sdk"
+import { AbstractClient } from "codeclimate-connector-sdk"
+
+import { ApiClient } from "./ApiClient"
 
 export class StreamSyncer {
+  private apiClient: ApiClient
+
   constructor(
-    public configuration: ClientConfiguration,
-    public recordProducer: RecordProducer,
-    public stateManager: StateManager,
-    public logger: Logger,
-    public stream: Stream,
+    public client: AbstractClient,
+    public streamId: string,
     public earliestDataCutoff: Date
-  ) {}
+  ) {
+    this.apiClient = new ApiClient(client.configuration.get("apiToken"))
+  }
 
   run(): Promise<void> {
-    return Promise.resolve()
+    return this.apiClient.get(`/api/gh/${this.streamId}/commits`).then((resp: any) => {
+      const repo = `https://codecov.io/api/gh/${this.streamId}`
+
+      resp.commits.map((c) => {
+        const record = {
+          _type: "CoverageTotals",
+          self: `${repo}/commits/${c.commitid}`,
+          commitOid: c.commitid,
+          coverage: Number(c.totals.c),
+          filesCount: c.totals.f,
+          linesCount: c.totals.n,
+          linesHitCount: c.totals.h,
+          repository: repo,
+        }
+
+        this.client.recordProducer.produce({ record })
+      })
+    })
   }
 }

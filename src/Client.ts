@@ -35,16 +35,7 @@ export class Client extends AbstractClient implements ClientInterface {
   }
 
   syncStream(stream: Stream, earliestDataCutoff: Date): Promise<void> {
-    const syncer = new StreamSyncer(
-      this.configuration,
-      this.recordProducer,
-      this.stateManager,
-      this.logger,
-      stream,
-      earliestDataCutoff
-    )
-
-    syncer.run()
-    return Promise.resolve() // TODO: fix - making TS happy :shrug:
+    const syncer = new StreamSyncer(this, stream.id, earliestDataCutoff)
+    return syncer.run()
   }
 }

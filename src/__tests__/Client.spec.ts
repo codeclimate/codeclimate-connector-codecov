@@ -7,9 +7,6 @@ import {
 
 import { Client } from "../Client"
 
-import { StreamSyncer } from "../StreamSyncer"
-jest.mock("../StreamSyncer")
-
 jest.mock("../ApiClient")
 
 const fakeConfig = new Map([["apiToken", "some-token"]])
@@ -59,12 +56,9 @@ describe(Client, () => {
 
   describe("syncStream", () => {
     test("it syncs", () => {
-      const client = new Client(
-        fakeConfig,
-        buildFakeRecordProducer(),
-        buildFakeStateManager(),
-        buildFakeLogger()
-      )
+      const producer = buildFakeRecordProducer()
+
+      const client = new Client(fakeConfig, producer, buildFakeStateManager(), buildFakeLogger())
 
       const stream = new Stream({
         _type: "Stream",
@@ -75,8 +69,7 @@ describe(Client, () => {
       const dateCutoff = new Date(new Date().valueOf() - 1_000_000)
 
       return client.syncStream(stream, dateCutoff).then(() => {
-        const mock = (StreamSyncer as any).mock
-        expect(mock.calls.length).toBe(1)
+        expect(producer.records.length).toBe(2)
       })
     })
   })
