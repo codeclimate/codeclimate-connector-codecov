@@ -2,7 +2,7 @@ import { RecordProducer } from "codeclimate-connector-sdk"
 
 import { ApiClient } from "./ApiClient"
 
-export function StreamDiscovery(apiClient: ApiClient, producer: RecordProducer) {
+export function StreamDiscover(apiClient: ApiClient, producer: RecordProducer) {
   function produceRecordFor(repo: string) {
     producer.produce({
       record: {

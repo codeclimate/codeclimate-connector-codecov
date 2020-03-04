@@ -8,7 +8,7 @@ import {
 import { ApiClient } from "./ApiClient"
 import { ConfigurationVerifier } from "./ConfigurationVerifier"
 import { StreamSyncer } from "./StreamSyncer"
-import { StreamDiscovery } from "./StreamDiscovery"
+import { StreamDiscover } from "./StreamDiscover"
 
 export class Client extends AbstractClient implements ClientInterface {
   verifyConfiguration(): Promise<VerifyConfigurationResult> {
@@ -16,7 +16,7 @@ export class Client extends AbstractClient implements ClientInterface {
   }
 
   discoverStreams(): Promise<void> {
-    return StreamDiscovery(this.apiClient, this.recordProducer).run()
+    return StreamDiscover(this.apiClient, this.recordProducer).run()
   }
 
   syncStream(stream: Stream, earliestDataCutoff: Date): Promise<void> {
