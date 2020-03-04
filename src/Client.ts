@@ -16,7 +16,6 @@ export class Client extends AbstractClient implements ClientInterface {
 
   discoverStreams(): Promise<void> {
     return new ApiClient(this.configuration.get("apiToken")).get("/api/gh").then((resp: any) => {
-
       const repos = resp["teams"].flatMap((team) => {
         const username = team["username"]
         return team.repos.map((repo) => `${username}/${repo["name"]}`)
@@ -24,8 +23,8 @@ export class Client extends AbstractClient implements ClientInterface {
 
       return repos.map((repo) => {
         this.recordProducer.produce({
-          type: "Stream",
-          attributes: {
+          record: {
+            _type: "Stream",
             id: repo,
             self: `https://codecov.io/api/gh/${repo}`,
             name: `Repository ${repo}`,

@@ -49,15 +49,10 @@ describe(Client, () => {
     test("list repos", () => {
       const producer = buildFakeRecordProducer()
 
-      const client = new Client(
-        fakeConfig,
-        producer,
-        buildFakeStateManager(),
-        buildFakeLogger()
-      )
+      const client = new Client(fakeConfig, producer, buildFakeStateManager(), buildFakeLogger())
 
       return client.discoverStreams().then(() => {
-        expect(producer.records.map((r: any) => r.attributes.id)).toEqual(["codeclimate-testing/engines-test"])
+        expect(producer.records.map((r: any) => r.id)).toEqual(["codeclimate-testing/engines-test"])
       })
     })
   })
@@ -72,12 +67,10 @@ describe(Client, () => {
       )
 
       const stream = new Stream({
-        type: "Stream",
-        attributes: {
-          id: "your-id-here",
-          self: "http://example.com/your-uri-here",
-          name: "your-name-here",
-        },
+        _type: "Stream",
+        id: "codeclimate-testing/engines-test",
+        self: "https://codecov.io/api/gh/codeclimate-testing/engines-test",
+        name: "Repository codeclimate-testing/engines-test",
       })
       const dateCutoff = new Date(new Date().valueOf() - 1_000_000)
 
