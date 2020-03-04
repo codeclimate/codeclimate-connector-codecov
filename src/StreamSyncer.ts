@@ -3,14 +3,12 @@ import { AbstractClient } from "codeclimate-connector-sdk"
 import { ApiClient } from "./ApiClient"
 
 export class StreamSyncer {
-  private apiClient: ApiClient
-
   constructor(
     public client: AbstractClient,
+    public apiClient: ApiClient,
     public streamId: string,
     public earliestDataCutoff: Date
   ) {
-    this.apiClient = new ApiClient(client.configuration.get("apiToken"))
   }
 
   run(): Promise<void> {

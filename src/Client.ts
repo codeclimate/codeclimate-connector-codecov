@@ -15,7 +15,7 @@ export class Client extends AbstractClient implements ClientInterface {
   }
 
   discoverStreams(): Promise<void> {
-    return new ApiClient(this.configuration.get("apiToken")).get("/api/gh").then((resp: any) => {
+    return this.apiClient.get("/api/gh").then((resp: any) => {
       const repos = resp["teams"].flatMap((team) => {
         const username = team["username"]
         return team.repos.map((repo) => `${username}/${repo["name"]}`)
@@ -35,7 +35,11 @@ export class Client extends AbstractClient implements ClientInterface {
   }
 
   syncStream(stream: Stream, earliestDataCutoff: Date): Promise<void> {
-    const syncer = new StreamSyncer(this, stream.id, earliestDataCutoff)
+    const syncer = new StreamSyncer(this, this.apiClient, stream.id, earliestDataCutoff)
     return syncer.run()
+  }
+
+  private get apiClient() {
+    return new ApiClient(this.configuration)
   }
 }

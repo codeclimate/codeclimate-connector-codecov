@@ -1,10 +1,18 @@
 import { URL } from "url"
 import * as https from "https"
 
+import {
+  ClientConfiguration,
+} from "codeclimate-connector-sdk"
+
 const BASE_URL = "https://codecov.io/"
 
 export class ApiClient {
-  constructor(public apiToken: string) {}
+  private apiToken: string
+
+  constructor(config: ClientConfiguration) {
+    this.apiToken = config.get("apiToken")
+  }
 
   get(path: string, params?: object): Promise<object> {
     return new Promise((resolve, reject) => {
