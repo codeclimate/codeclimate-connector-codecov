@@ -1,0 +1,5 @@
+/node_modules/
+/lib/
+/collector-config.json
+connector-config.json
+stream.json

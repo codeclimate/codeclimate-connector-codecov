@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "status": 200
+  },
+  "teams": [
+    {
+      "username": "codeclimate-testing",
+      "service": "github",
+      "repos": [
+        {
+          "fork": null,
+          "name": "engines-test",
+          "language": "php",
+          "cache": {
+            "commit": {
+              "author": {
+                "username": "filipesperandio",
+                "service_id": "316873",
+                "name": "Filipe Esperandio",
+                "service": "github",
+                "email": "filipesperandio@gmail.com"
+              },
+              "timestamp": "2020-03-03T14:26:55",
+              "totals": {
+                "C": 0,
+                "b": 0,
+                "d": 0,
+                "f": 1,
+                "h": 9,
+                "M": 0,
+                "c": "9.78261",
+                "N": 0,
+                "p": 0,
+                "m": 83,
+                "diff": null,
+                "s": 1,
+                "n": 92
+              },
+              "commitid": "3bfbfe212a0ffc4e35ea076669bc4f8047ef2141",
+              "ci_passed": null,
+              "message": "setup codecov"
+            }
+          },
+          "activated": true,
+          "private": true,
+          "yaml": {
+            "comment": {
+              "require_changes": false,
+              "layout": "reach,diff,flags,tree",
+              "behavior": "default"
+            },
+            "parsers": {
+              "gcov": {
+                "branch_detection": {
+                  "macro": false,
+                  "conditional": true,
+                  "method": false,
+                  "loop": true
+                }
+              }
+            },
+            "coverage": {
+              "range": [
+                70,
+                100
+              ],
+              "round": "down",
+              "precision": 2
+            },
+            "codecov": {
+              "require_ci_to_pass": false
+            }
+          },
+          "updatestamp": "2020-03-03T14:27:44.378751+00:00",
+          "branch": "master",
+          "upload_token": "58ae9eef-fa00-4bd2-8cf6-af471927a930"
+        }
+      ],
+      "cache": {
+        "stats": {
+          "repos": 1,
+          "users": 1
+        }
+      },
+      "avatar_url": null,
+      "service_id": "15129156",
+      "email": "hello@codeclimate.com"
+    },
+    {
+      "username": "EasyRetro",
+      "service": "github",
+      "repos": [],
+      "cache": {
+        "stats": {
+          "users": 1
+        }
+      },
+      "avatar_url": null,
+      "service_id": "1420675",
+      "email": null
+    },
+    {
+      "username": "filipesperandio",
+      "service": "github",
+      "repos": [],
+      "cache": null,
+      "avatar_url": null,
+      "service_id": "316873",
+      "email": "filipesperandio@gmail.com"
+    }
+  ]
+}
+
