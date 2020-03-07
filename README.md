@@ -1,7 +1,7 @@
 # Code Climate Connector: codecov
 
 A connector integration for Code Climate Velocity to collect data from
-[Codecov.io](https://codevoc.io).
+[Codecov.io](https://codecov.io).
 
 ## Configuration
 
